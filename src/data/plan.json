@@ -1,0 +1,20 @@
+[
+    {
+            "id":0,
+            "img": "./assets/images/icon-arcade.svg",
+            "planName": "Arcade",
+            "planPrice": "9"
+    },
+    {
+            "id":1,
+            "img": "./assets/images/icon-advanced.svg",
+            "planName": "Advanced",
+            "planPrice": "12"
+    },
+    {
+            "id":2,
+            "img": "./assets/images/icon-pro.svg",
+            "planName": "Pro",
+            "planPrice": "15"
+    }
+]

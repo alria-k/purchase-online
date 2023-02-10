@@ -1,0 +1,61 @@
+.aside {
+    background-image: url('/assets/images/bg-sidebar-desktop.svg');
+    background-repeat: no-repeat;
+    max-width: 275px;
+    width: 100%;
+
+    &__steps {
+        &-list {
+            margin: 0 auto;
+            padding: 35px 0 0 0;
+            max-width: 195px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+    }
+}
+
+.steps {
+    &-title {
+        color: hsl(206, 94%, 87%);
+        font-weight: 300;
+        font-size: 14px;
+    }
+
+    &-description {
+        color: white;
+        font-weight: 700;
+        line-height: 98%;
+        letter-spacing: 2px;
+        font-size: 16px;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        &--active {
+            .steps__count {
+                background-color: hsl(206, 94%, 87%);
+                color: black;
+                border-color: hsl(206, 94%, 87%);
+            }
+        }
+    }
+
+    &__count {
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+        padding: 8px 15px;
+        border: 1px solid white;
+        border-radius: 100px;
+        transition: background-color, color 0.2s ease-in;
+    }
+
+    &__text {
+        text-transform: uppercase;
+    }
+}

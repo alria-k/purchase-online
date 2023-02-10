@@ -1,0 +1,55 @@
+.aside {
+  background-image: url("/assets/images/bg-sidebar-desktop.svg");
+  background-repeat: no-repeat;
+  max-width: 275px;
+  width: 100%;
+}
+
+.aside__steps-list {
+  margin: 0 auto;
+  padding: 35px 0 0 0;
+  max-width: 195px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.steps-title {
+  color: #bfe2fd;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.steps-description {
+  color: white;
+  font-weight: 700;
+  line-height: 98%;
+  letter-spacing: 2px;
+  font-size: 16px;
+}
+
+.steps__item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.steps__item--active .steps__count {
+  background-color: #bfe2fd;
+  color: black;
+  border-color: #bfe2fd;
+}
+
+.steps__count {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  padding: 8px 15px;
+  border: 1px solid white;
+  border-radius: 100px;
+  transition: background-color, color 0.2s ease-in;
+}
+
+.steps__text {
+  text-transform: uppercase;
+}

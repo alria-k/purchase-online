@@ -1,6 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+@import '__aside';
+@import '__main';
 
 body {
     font-family: 'Ubuntu', sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
+}
+
+main {
+    margin-top: 50px;
+}
+
+.container {
+    max-width: 940px;
+    padding: 0 15px;
+    margin: auto auto;
+}
+
+.block {
+    display: flex;
+    gap: 80px;
+    max-height: 100%;
 }

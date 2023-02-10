@@ -1,0 +1,20 @@
+[
+    {
+            "id":0,
+            "addsName": "Online Service",
+            "addsBenefits": "Access to multiplayer games",
+            "addsPrice": "1"
+    },
+    {
+            "id":1,
+            "addsName": "Larger storage",
+            "addsBenefits": "Extra 1TB of cloud save",
+            "addsPrice": "2"
+    },
+    {
+            "id":2,
+            "addsName": "Customizable Profile",
+            "addsBenefits": "Custom theme on your profile",
+            "addsPrice": "2"
+    }
+]
