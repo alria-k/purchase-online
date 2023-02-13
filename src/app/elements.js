@@ -4,7 +4,7 @@ export function formElems() {
   sectionInner.insertAdjacentHTML(
     "beforeend",
     `
-      <div class="form__content first-step" data-step="first">
+      <div class="form__content first-step" data-stepCount="first">
                   <div class="form__text-box">
                     <h1 class="form-title">Personal info</h1>
                     <p class="form-description">
@@ -27,12 +27,12 @@ export function formElems() {
                     <label>Phone Number</label>
                     <input
                       class="form__input"
-                      type="text"
+                      type="tel"
                       placeholder="e.g. +1 234 567 890"
                     />
                   </form>
                   <div class="btn-box">
-                    <button class="next-step__btn">Next Step</button>
+                    <input class="next-step__btn" type="submit" value="Next Step">
                   </div>
                 </div>
       `
@@ -41,7 +41,7 @@ export function formElems() {
 export function planElems(jsonFile, payrent) {
   let stepContainer = document.createElement("div");
   stepContainer.className = "form__content second-step";
-  stepContainer.dataset.step = "second";
+  stepContainer.dataset.stepCount = "second";
   sectionInner.append(stepContainer);
   stepContainer.insertAdjacentHTML(
     "beforeend",
@@ -71,8 +71,8 @@ export function planElems(jsonFile, payrent) {
         </div>
       </form>
       <div class="btn-box">
-        <button class="next-step__btn">Next Step</button>
-        <button class="back-step__btn">Go Back</button>
+        <input class="next-step__btn" type="submit" value="Next Step">
+        <input class="back-step__btn" type="submit" value="Go Back">
       </div>`
   );
   let planItemContainer = document.getElementsByClassName("plan__container");
@@ -117,7 +117,7 @@ export function planElems(jsonFile, payrent) {
 export function addsElems(jsonFile, payrent) {
   let stepContainer = document.createElement("div");
   stepContainer.className = "form__content third-step";
-  stepContainer.dataset.step = "third";
+  stepContainer.dataset.stepCount = "third";
   sectionInner.append(stepContainer);
   stepContainer.insertAdjacentHTML(
     "beforeend",
@@ -132,8 +132,8 @@ export function addsElems(jsonFile, payrent) {
           <ul class="adds__item-box"></ul>
         </form>
         <div class="btn-box">
-          <button class="next-step__btn">Next Step</button>
-          <button class="back-step__btn">Go Back</button>
+          <input class="next-step__btn" type="submit" value="Next Step">
+          <input class="back-step__btn" type="submit" value="Go Back">
         </div>
         `
   );

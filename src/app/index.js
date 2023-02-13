@@ -1,5 +1,6 @@
-import { addsElems, planElems, formElems } from "./elements.js";
+import { StepsLogic } from "./logic.js";
 
-formElems();
-planElems("./src/data/plan.json", false);
-addsElems("./src/data/adds.json", false);
+new StepsLogic(
+  document.querySelectorAll(".steps__item"),
+  document.getElementsByClassName("form__content")
+);
