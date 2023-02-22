@@ -1,20 +1,23 @@
-[
-    {
+{
+    "service":{
             "id":0,
             "addsName": "Online Service",
             "addsBenefits": "Access to multiplayer games",
-            "addsPrice": "1"
+            "addsMounthlyPrice": "1",
+            "addsYearlyPrice": "10"
     },
-    {
+    "storage":{
             "id":1,
             "addsName": "Larger storage",
             "addsBenefits": "Extra 1TB of cloud save",
-            "addsPrice": "2"
+            "addsMounthlyPrice": "2",
+            "addsYearlyPrice": "20"
     },
-    {
+    "profile":{
             "id":2,
             "addsName": "Customizable Profile",
             "addsBenefits": "Custom theme on your profile",
-            "addsPrice": "2"
+            "addsMounthlyPrice": "2",
+            "addsYearlyPrice": "20"
     }
-]
+}

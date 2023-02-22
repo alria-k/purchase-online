@@ -1,25 +1,25 @@
 import { addsElems, planElems, formElems } from "./elements.js";
-import { validation } from "./validator.js";
+import { validation, fillData } from "./validator.js";
 
 const sectionInner = document.querySelector(".section__inner");
 export class StepsLogic {
   constructor(steps, forms) {
     this.steps = steps;
     this.forms = forms;
-    this.stepsCount = 0;
-    this.yearlyRent = false;
+    this.stepsCount = 1;
+    this.key;
     this.fieldsData = {
       text: {
-        regexp: /^(?!\s*$).+/,
         valid: false,
+        regexp: /^(?!\s*$).+/,
       },
       email: {
-        regexp: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
         valid: false,
+        regexp: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
       },
       tel: {
-        regexp: /^\+?[1-9][0-9]{7,14}$/,
         valid: false,
+        regexp: /^\+?[1-9][0-9]{7,14}$/,
       },
     };
     this.elemsCreateObject = {
@@ -39,28 +39,47 @@ export class StepsLogic {
 
     this.validateContent = this.validateContent.bind(this);
     this.checkAndChangeSteps = this.checkAndChangeSteps.bind(this);
+    this.checkValid = this.checkValid.bind(this);
 
     this.checkAndChangeSteps();
     this.validateContent();
   }
   validateContent() {
-    this.btn = [...document.getElementsByClassName("next-step__btn")];
-    this.btn.forEach((elem) => {
-      elem.addEventListener("click", (event) => {});
+    document.addEventListener("click", (event) => {
+      if (event.target.classList.contains("next-step__btn")) {
+        if (this.checkValid()) {
+          this.stepsCount++;
+          this.checkAndChangeSteps();
+        }
+      }
+      if (event.target.classList.contains("back-step__btn")) {
+        this.stepsCount--;
+        this.checkAndChangeSteps();
+      }
+      if (event.target.classList.contains("plan-radio")) {
+      }
     });
   }
   checkAndChangeSteps() {
     Object.values(this.elemsCreateObject).forEach((value, index) => {
       this.steps[index].classList.remove("steps__item--active");
       if (this.stepsCount == index) {
-        value.func(value.params, this.yearlyRent);
+        value.func(value.params);
         this.steps[index].classList.add("steps__item--active");
-      } else {
-        sectionInner.firstChild.remove();
+      }
+      if (sectionInner.children.length > 1) {
+        sectionInner.removeChild(this.forms[0]);
       }
     });
   }
-  checkYearlyBill() {
-    this.billCheckBox = document.querySelector(".payrent-checkbox");
+  checkValid() {
+    validation(document.querySelectorAll(".form__input"), this.fieldsData);
+    let key = [];
+    for (let keys in this.fieldsData) {
+      if (this.fieldsData[keys].valid == true) {
+        key.push(this.fieldsData[keys].valid);
+      }
+    }
+    if (key.length == 3) return true;
   }
 }

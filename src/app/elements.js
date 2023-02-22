@@ -1,4 +1,7 @@
+import { fillData } from "./validator.js";
+
 const sectionInner = document.querySelector(".section__inner");
+let yearlyRent = false;
 
 export function formElems() {
   sectionInner.insertAdjacentHTML(
@@ -38,7 +41,7 @@ export function formElems() {
       `
   );
 }
-export function planElems(jsonFile, payrent) {
+export function planElems(jsonFile) {
   let stepContainer = document.createElement("div");
   stepContainer.className = "form__content second-step";
   stepContainer.dataset.stepCount = "second";
@@ -61,6 +64,7 @@ export function planElems(jsonFile, payrent) {
               class="payrent-checkbox"
               type="checkbox"
               name="payrent-checkbox"
+              ${yearlyRent ? "checked" : ""}
             />
             <label
               class="payrent-checkbox__circle"
@@ -80,7 +84,7 @@ export function planElems(jsonFile, payrent) {
   fetch(jsonFile)
     .then((response) => response.json())
     .then((json) =>
-      json.map((item) => {
+      Object.entries(json).map((item) => {
         planItemContainerArray.forEach((elem) => {
           elem.insertAdjacentHTML(
             "beforeend",
@@ -90,31 +94,40 @@ export function planElems(jsonFile, payrent) {
                   class="plan-radio"
                   type="radio"
                   name="plan"
-                  data-plan="arcade"
+                  data-plan=${item[0]}
                 />
                 <div class="custom__radio">
                   <img
                     class="plan__img"
-                    src=${item.img}
+                    src=${item[1].img}
                     alt="arcade-img"
                   />
                   <div class="plan__item-text">
-                    <h1 class="tarif__title">${item.planName}</h1>
-                    <p class="tarif__description">$${
-                      payrent
-                        ? item.planPrice * 10 + "/yr"
-                        : item.planPrice + "/mo"
-                    }</p>
+                    <h1 class="tarif__title">${item[1].planName}</h1>
                   </div>
                 </div>
               </li>
                   `
           );
         });
+        changingPrice(
+          item[1].planMounthyPrice,
+          item[1].planYearlyPrice,
+          "plan__item-text"
+        );
       })
     );
+  document
+    .querySelector(".payrent-checkbox")
+    .addEventListener("click", (event) => {
+      if (event.target.checked) {
+        yearlyRent = true;
+      } else {
+        yearlyRent = false;
+      }
+    });
 }
-export function addsElems(jsonFile, payrent) {
+export function addsElems(jsonFile) {
   let stepContainer = document.createElement("div");
   stepContainer.className = "form__content third-step";
   stepContainer.dataset.stepCount = "third";
@@ -142,7 +155,7 @@ export function addsElems(jsonFile, payrent) {
   fetch(jsonFile)
     .then((response) => response.json())
     .then((json) =>
-      json.map((item) => {
+      Object.entries(json).map((item) => {
         addsItemContainerArray.forEach((elem) => {
           elem.insertAdjacentHTML(
             "beforeend",
@@ -152,6 +165,7 @@ export function addsElems(jsonFile, payrent) {
                   <input
                     class="adds-checkbox"
                     type="checkbox"
+                    data-add=${item[0]}
                     name="adds-checkbox"
                   />
                   <label
@@ -161,23 +175,43 @@ export function addsElems(jsonFile, payrent) {
                 </div>
                 <div class="adds__item-content">
                   <div class="adds__item-text">
-                    <h1 class="tarif__title">${item.addsName}</h1>
+                    <h1 class="tarif__title">${item[1].addsName}</h1>
                     <p class="tarif__description">
-                      ${item.addsBenefits}
+                      ${item[1].addsBenefits}
                     </p>
                   </div>
                   <div class="adds__item-price">
-                    <p class="tarif__description">+$${
-                      payrent
-                        ? item.addsPrice * 10 + "/yr"
-                        : item.addsPrice + "/mo"
-                    }</p>
                   </div>
                 </div>
               </li>
               `
           );
         });
+        changingPrice(
+          item[1].addsMounthlyPrice,
+          item[1].addsYearlyPrice,
+          "adds__item-price"
+        );
       })
     );
+}
+
+// export function totalElems(array)
+
+function changingPrice(mounthly, yearly, container) {
+  let textContainer = Array.from(document.getElementsByClassName(container));
+  let text = document.createElement("p");
+  text.className = "tarif__description";
+  textContainer.forEach((elem) => {
+    elem.append(text);
+    billingCheck(text, mounthly, yearly);
+  });
+}
+
+function billingCheck(elem, priceM, priceY) {
+  if (yearlyRent) {
+    return (elem.innerText = `$${priceY}/yr`);
+  } else {
+    return (elem.innerText = `$${priceM}/mo`);
+  }
 }
