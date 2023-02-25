@@ -2,6 +2,11 @@ import { fillData } from "./validator.js";
 
 const sectionInner = document.querySelector(".section__inner");
 let yearlyRent = false;
+let finalStepObject = {
+  plan: {},
+  adds: {},
+  total: {},
+};
 
 export function formElems() {
   sectionInner.insertAdjacentHTML(
@@ -115,6 +120,13 @@ export function planElems(jsonFile) {
           item[1].planYearlyPrice,
           "plan__item-text"
         );
+        fillData(
+          "[type='radio']",
+          finalStepObject.plan,
+          item[0],
+          item[1].planName,
+          getProperPrice(item[1].planMounthyPrice, item[1].planYearlyPrice)
+        );
       })
     );
   document
@@ -192,11 +204,17 @@ export function addsElems(jsonFile) {
           item[1].addsYearlyPrice,
           "adds__item-price"
         );
+        fillData(
+          ".adds-checkbox",
+          finalStepObject.adds,
+          item[0],
+          item[1].addsName,
+          getProperPrice(item[1].addsMounthlyPrice, item[1].addsYearlyPrice)
+        );
       })
     );
 }
-
-// export function totalElems(array)
+export function totalElems() {}
 
 function changingPrice(mounthly, yearly, container) {
   let textContainer = Array.from(document.getElementsByClassName(container));
@@ -215,3 +233,27 @@ function billingCheck(elem, priceM, priceY) {
     return (elem.innerText = `$${priceM}/mo`);
   }
 }
+
+export function totalData() {
+  let obj = finalStepObject;
+  let totalPrice = [];
+  for (let keys in obj) {
+    let pop = obj[keys];
+    Object.values(pop).forEach((elem) => {
+      totalPrice.push(elem.price);
+    });
+  }
+  obj.total = totalPrice.reduce((a, b) => a + b);
+}
+
+//help func
+
+function getProperPrice(mounthlyPay, yearlyPay) {
+  if (yearlyRent) {
+    return yearlyPay;
+  } else {
+    return mounthlyPay;
+  }
+}
+
+////////////////
