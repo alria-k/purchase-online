@@ -3,21 +3,21 @@
             "id":0,
             "addsName": "Online Service",
             "addsBenefits": "Access to multiplayer games",
-            "addsMounthlyPrice": "1",
-            "addsYearlyPrice": "10"
+            "mounthlyPrice": 1,
+            "yearlyPrice": 10
     },
     "storage":{
             "id":1,
             "addsName": "Larger storage",
             "addsBenefits": "Extra 1TB of cloud save",
-            "addsMounthlyPrice": "2",
-            "addsYearlyPrice": "20"
+            "mounthlyPrice": 2,
+            "yearlyPrice": 20
     },
     "profile":{
             "id":2,
             "addsName": "Customizable Profile",
             "addsBenefits": "Custom theme on your profile",
-            "addsMounthlyPrice": "2",
-            "addsYearlyPrice": "20"
+            "mounthlyPrice": 2,
+            "yearlyPrice": 20
     }
 }

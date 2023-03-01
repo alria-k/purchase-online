@@ -19,6 +19,8 @@ main {
 
 .block {
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 80px;
     max-height: 100%;
 }

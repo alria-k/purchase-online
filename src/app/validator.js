@@ -11,25 +11,3 @@ export function validation(forms, fields) {
     }
   }
 }
-
-export function fillData(e, obj, data, nameVal, priceVal) {
-  document.querySelectorAll(e).forEach((elem, index) => {
-    elem.addEventListener("click", (event) => {
-      let targetAttribute = event.target.getAttribute("type");
-      switch (Object.values(event.target.dataset) == data && targetAttribute) {
-        case "radio":
-          obj.value = {
-            name: nameVal,
-            price: priceVal,
-          };
-          break;
-        case "checkbox":
-          obj[index] = {
-            name: nameVal,
-            price: priceVal,
-          };
-          break;
-      }
-    });
-  });
-}

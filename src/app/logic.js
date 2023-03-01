@@ -1,5 +1,5 @@
-import { addsElems, planElems, formElems, totalData } from "./elements.js";
-import { validation, fillData } from "./validator.js";
+import { addsElems, planElems, formElems, totalElems } from "./elements.js";
+import { validation } from "./validator.js";
 
 const sectionInner = document.querySelector(".section__inner");
 export class StepsLogic {
@@ -36,14 +36,14 @@ export class StepsLogic {
         params: "./src/data/adds.json",
       },
       total: {
-        func: totalData,
+        func: totalElems,
         params: "",
       },
     };
 
     this.validateContent = this.validateContent.bind(this);
     this.checkAndChangeSteps = this.checkAndChangeSteps.bind(this);
-    // this.checkValid = this.checkValid.bind(this);
+    this.checkValid = this.checkValid.bind(this);
 
     this.checkAndChangeSteps();
     this.validateContent();
@@ -51,39 +51,51 @@ export class StepsLogic {
   validateContent() {
     document.addEventListener("click", (event) => {
       if (event.target.classList.contains("next-step__btn")) {
-        this.stepsCount++;
-        this.checkAndChangeSteps();
-        // if (this.checkValid()) {
-        //   this.stepsCount++;
-        //   this.checkAndChangeSteps();
-        // }
+        if (this.checkValid()) {
+          this.stepsCount++;
+          this.checkAndChangeSteps(
+            "form__animation--forward",
+            "form__animation--backwards"
+          );
+        }
       }
       if (event.target.classList.contains("back-step__btn")) {
         this.stepsCount--;
-        this.checkAndChangeSteps();
+        this.checkAndChangeSteps(
+          "form__animation--from-back-to-forward",
+          "form__animation--from-forward-to-back"
+        );
       }
     });
   }
-  checkAndChangeSteps() {
-    Object.values(this.elemsCreateObject).forEach((value, index) => {
+  checkAndChangeSteps(firstCls, secondCls) {
+    Object.values(this.elemsCreateObject).forEach(async (value, index) => {
       this.steps[index].classList.remove("steps__item--active");
       if (this.stepsCount == index) {
-        value.func(value.params);
+        await value.func(value.params);
         this.steps[index].classList.add("steps__item--active");
+        this.forms[0].classList.remove(firstCls);
       }
       if (sectionInner.children.length > 1) {
-        sectionInner.removeChild(this.forms[0]);
+        this.forms[0].classList.add(secondCls);
+        this.forms[1].classList.add(firstCls);
       }
     });
+    setTimeout(() => {
+      if (sectionInner.children.length != 1) {
+        sectionInner.removeChild(this.forms[0]);
+        this.forms[0].classList.remove(firstCls);
+      }
+    }, 600);
   }
-  // checkValid() {
-  //   validation(document.querySelectorAll(".form__input"), this.fieldsData);
-  //   let key = [];
-  //   for (let keys in this.fieldsData) {
-  //     if (this.fieldsData[keys].valid == true) {
-  //       key.push(this.fieldsData[keys].valid);
-  //     }
-  //   }
-  //   if (key.length == 3) return true;
-  // }
+  checkValid() {
+    validation(document.querySelectorAll(".form__input"), this.fieldsData);
+    let key = [];
+    for (let keys in this.fieldsData) {
+      if (this.fieldsData[keys].valid == true) {
+        key.push(this.fieldsData[keys].valid);
+      }
+    }
+    if (key.length == 3) return true;
+  }
 }

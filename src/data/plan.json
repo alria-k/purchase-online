@@ -3,21 +3,21 @@
             "id":0,
             "img": "./assets/images/icon-arcade.svg",
             "planName": "Arcade",
-            "planMounthyPrice": "9",
-            "planYearlyPrice": "90"
+            "mounthlyPrice": 9,
+            "yearlyPrice": 90
     },
     "advanced": {
             "id":1,
             "img": "./assets/images/icon-advanced.svg",
             "planName": "Advanced",
-            "planMounthyPrice": "12",
-            "planYearlyPrice": "120"
+            "mounthlyPrice": 12,
+            "yearlyPrice": 120
     },
     "pro":{
             "id":2,
             "img": "./assets/images/icon-pro.svg",
             "planName": "Pro",
-            "planMounthyPrice": "15",
-            "planYearlyPrice": "150"
+            "mounthlyPrice": 15,
+            "yearlyPrice": 150
     }
 }

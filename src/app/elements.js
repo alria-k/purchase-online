@@ -1,7 +1,6 @@
-import { fillData } from "./validator.js";
-
 const sectionInner = document.querySelector(".section__inner");
 let yearlyRent = false;
+let jsonData;
 let finalStepObject = {
   plan: {},
   adds: {},
@@ -46,7 +45,8 @@ export function formElems() {
       `
   );
 }
-export function planElems(jsonFile) {
+export async function planElems(jsonFile) {
+  await getJsonData(jsonFile);
   let stepContainer = document.createElement("div");
   stepContainer.className = "form__content second-step";
   stepContainer.dataset.stepCount = "second";
@@ -86,60 +86,50 @@ export function planElems(jsonFile) {
   );
   let planItemContainer = document.getElementsByClassName("plan__container");
   let planItemContainerArray = Array.from(planItemContainer);
-  fetch(jsonFile)
-    .then((response) => response.json())
-    .then((json) =>
-      Object.entries(json).map((item) => {
-        planItemContainerArray.forEach((elem) => {
-          elem.insertAdjacentHTML(
-            "beforeend",
-            `
-                <li class="plan__item">
-                <input
-                  class="plan-radio"
-                  type="radio"
-                  name="plan"
-                  data-plan=${item[0]}
-                />
-                <div class="custom__radio">
-                  <img
-                    class="plan__img"
-                    src=${item[1].img}
-                    alt="arcade-img"
-                  />
-                  <div class="plan__item-text">
-                    <h1 class="tarif__title">${item[1].planName}</h1>
-                  </div>
-                </div>
-              </li>
-                  `
-          );
-        });
-        changingPrice(
-          item[1].planMounthyPrice,
-          item[1].planYearlyPrice,
-          "plan__item-text"
-        );
-        fillData(
-          "[type='radio']",
-          finalStepObject.plan,
-          item[0],
-          item[1].planName,
-          getProperPrice(item[1].planMounthyPrice, item[1].planYearlyPrice)
-        );
-      })
-    );
+  for (let keys in jsonData) {
+    planItemContainerArray.forEach((elem) => {
+      elem.insertAdjacentHTML(
+        "beforeend",
+        `
+            <li class="plan__item">
+            <input
+              class="plan-radio"
+              type="radio"
+              name="plan"
+              data-plan=${keys}
+            />
+            <div class="custom__radio">
+              <img
+                class="plan__img"
+                src=${jsonData[keys].img}
+                alt="arcade-img"
+              />
+              <div class="plan__item-text">
+                <h1 class="tarif__title">${jsonData[keys].planName}</h1>
+                <p class="tarif__description money__component"></p>
+              </div>
+            </div>
+          </li>
+              `
+      );
+    });
+  }
+  changingPrice("plan__item-text", ".money__component");
+  fillData("[type='radio']", finalStepObject.plan, jsonData);
   document
     .querySelector(".payrent-checkbox")
     .addEventListener("click", (event) => {
       if (event.target.checked) {
         yearlyRent = true;
+        changingPrice("plan__item-text", ".money__component");
       } else {
         yearlyRent = false;
+        changingPrice("plan__item-text", ".money__component");
       }
     });
 }
-export function addsElems(jsonFile) {
+export async function addsElems(jsonFile) {
+  await getJsonData(jsonFile);
   let stepContainer = document.createElement("div");
   stepContainer.className = "form__content third-step";
   stepContainer.dataset.stepCount = "third";
@@ -164,20 +154,17 @@ export function addsElems(jsonFile) {
   );
   let addsItemContainer = document.getElementsByClassName("adds__item-box");
   let addsItemContainerArray = Array.from(addsItemContainer);
-  fetch(jsonFile)
-    .then((response) => response.json())
-    .then((json) =>
-      Object.entries(json).map((item) => {
-        addsItemContainerArray.forEach((elem) => {
-          elem.insertAdjacentHTML(
-            "beforeend",
-            `
+  for (let keys in jsonData) {
+    addsItemContainerArray.forEach((elem) => {
+      elem.insertAdjacentHTML(
+        "beforeend",
+        `
               <li class="adds__item">
                 <div class="adds-checkbox__container">
                   <input
                     class="adds-checkbox"
                     type="checkbox"
-                    data-add=${item[0]}
+                    data-add=${keys}
                     name="adds-checkbox"
                   />
                   <label
@@ -187,73 +174,161 @@ export function addsElems(jsonFile) {
                 </div>
                 <div class="adds__item-content">
                   <div class="adds__item-text">
-                    <h1 class="tarif__title">${item[1].addsName}</h1>
+                    <h1 class="tarif__title">${jsonData[keys].addsName}</h1>
                     <p class="tarif__description">
-                      ${item[1].addsBenefits}
+                      ${jsonData[keys].addsBenefits}
                     </p>
                   </div>
                   <div class="adds__item-price">
+                    <p class="tarif__description money__component"></p>
                   </div>
                 </div>
               </li>
               `
-          );
-        });
-        changingPrice(
-          item[1].addsMounthlyPrice,
-          item[1].addsYearlyPrice,
-          "adds__item-price"
-        );
-        fillData(
-          ".adds-checkbox",
-          finalStepObject.adds,
-          item[0],
-          item[1].addsName,
-          getProperPrice(item[1].addsMounthlyPrice, item[1].addsYearlyPrice)
-        );
-      })
-    );
+      );
+    });
+  }
+  changingPrice("adds__item-price", ".money__component");
+  fillData(".adds-checkbox", finalStepObject.adds, jsonData);
 }
-export function totalElems() {}
-
-function changingPrice(mounthly, yearly, container) {
-  let textContainer = Array.from(document.getElementsByClassName(container));
-  let text = document.createElement("p");
-  text.className = "tarif__description";
-  textContainer.forEach((elem) => {
-    elem.append(text);
-    billingCheck(text, mounthly, yearly);
+export function totalElems() {
+  totalData();
+  let stepContainer = document.createElement("div");
+  stepContainer.className = "form__content fourth-step";
+  stepContainer.dataset.stepCount = "fourth";
+  sectionInner.append(stepContainer);
+  stepContainer.insertAdjacentHTML(
+    "beforeend",
+    `
+  <div class="form__text-box">
+                  <h1 class="form-title">Finishing up</h1>
+                  <p class="form-description">
+                    Double-check everything looks OK before confirming
+                  </p>
+                </div>
+                <div class="total__box">
+                  <div class="total__box-info">
+                    <div class="total-plan__text">
+                      <div class="plan__text-title">
+                        <h4 class="tarif__title">${
+                          yearlyRent
+                            ? finalStepObject.plan.value.name + " (Yearly)"
+                            : finalStepObject.plan.value.name + " (Mounthly)"
+                        }</h4>
+                        <button class="btn__change-plan">Change</button>
+                      </div>
+                      <p class="tarif__title">$${
+                        yearlyRent
+                          ? finalStepObject.plan.value.price + "/yr"
+                          : finalStepObject.plan.value.price + "/mo"
+                      }</p>
+                    </div>
+                    <div class="total-adds__text">
+                    </div>
+                  </div>
+                  <div class="total__box-price">
+                    <p class="tarif__description">Total ${
+                      yearlyRent ? "(per year)" : "(per month)"
+                    }</p>
+                    <p class="total-price__text">+$${
+                      yearlyRent
+                        ? finalStepObject.total + "/yr"
+                        : finalStepObject.total + "/mo"
+                    }</p>
+                  </div>
+                </div>
+                <div class="btn-box">
+                  <input class="next-step__btn" type="submit" value="Confirm" />
+                  <input class="back-step__btn" type="submit" value="Go Back" />
+                </div>
+              </div>
+  `
+  );
+  let addsText = Array.from(
+    document.getElementsByClassName("total-adds__text")
+  );
+  addsText.forEach((elem) => {
+    for (let keys in finalStepObject.adds) {
+      elem.insertAdjacentHTML(
+        "beforeend",
+        `
+      <div class="adds__text-box">
+        <p class="tarif__description">${finalStepObject.adds[keys].name}</p>
+        <p class="tarif__price">+$${
+          yearlyRent
+            ? finalStepObject.adds[keys].price + "/yr"
+            : finalStepObject.adds[keys].price + "/mo"
+        }</p>
+      </div>
+      `
+      );
+    }
   });
 }
 
-function billingCheck(elem, priceM, priceY) {
-  if (yearlyRent) {
-    return (elem.innerText = `$${priceY}/yr`);
-  } else {
-    return (elem.innerText = `$${priceM}/mo`);
-  }
-}
-
-export function totalData() {
+function totalData() {
   let obj = finalStepObject;
   let totalPrice = [];
   for (let keys in obj) {
-    let pop = obj[keys];
-    Object.values(pop).forEach((elem) => {
+    let getKeys = obj[keys];
+    Object.values(getKeys).forEach((elem) => {
       totalPrice.push(elem.price);
     });
   }
   obj.total = totalPrice.reduce((a, b) => a + b);
 }
 
-//help func
-
-function getProperPrice(mounthlyPay, yearlyPay) {
-  if (yearlyRent) {
-    return yearlyPay;
-  } else {
-    return mounthlyPay;
-  }
+function changingPrice(container, text) {
+  let textContainer = Array.from(document.getElementsByClassName(container));
+  textContainer.forEach((elem, index) => {
+    let textElem = elem.querySelector(text);
+    let extraMounth = document.createElement("p");
+    extraMounth.className = "tarif__description extra-month";
+    if (yearlyRent) {
+      return (textElem.innerText = `$${
+        Object.values(jsonData)[index].yearlyPrice
+      }/yr`);
+    } else {
+      return (textElem.innerText = `$${
+        Object.values(jsonData)[index].mounthlyPrice
+      }/mo`);
+    }
+  });
 }
 
+function fillData(e, fillObj, jsonObj) {
+  let objValues = Object.values(jsonObj);
+  document.querySelectorAll(e).forEach((elem, index) => {
+    elem.addEventListener("click", (event) => {
+      let targetAttribute = event.target.getAttribute("type");
+      let properPriceVal = yearlyRent
+        ? objValues[index].yearlyPrice
+        : objValues[index].mounthlyPrice;
+      switch (targetAttribute) {
+        case "radio":
+          fillObj.value = {
+            name: objValues[index].planName,
+            price: properPriceVal,
+          };
+          break;
+        case "checkbox":
+          fillObj[index] = {
+            name: objValues[index].addsName,
+            price: properPriceVal,
+          };
+          break;
+      }
+      if (!event.target.checked) {
+        delete fillObj[index];
+      }
+    });
+  });
+}
+
+//help func
+
+async function getJsonData(json) {
+  let res = await fetch(json);
+  jsonData = await res.json();
+}
 ////////////////
