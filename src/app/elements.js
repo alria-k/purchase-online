@@ -116,16 +116,17 @@ export async function planElems(jsonFile) {
   }
   changingPrice("plan__item-text", ".money__component");
   fillData("[type='radio']", finalStepObject.plan, jsonData);
+  extraMonthes(yearlyRent, document.querySelectorAll(".plan__item-text"));
   document
     .querySelector(".payrent-checkbox")
     .addEventListener("click", (event) => {
       if (event.target.checked) {
         yearlyRent = true;
-        changingPrice("plan__item-text", ".money__component");
       } else {
         yearlyRent = false;
-        changingPrice("plan__item-text", ".money__component");
       }
+      changingPrice("plan__item-text", ".money__component");
+      extraMonthes(yearlyRent, document.querySelectorAll(".plan__item-text"));
     });
 }
 export async function addsElems(jsonFile) {
@@ -155,7 +156,7 @@ export async function addsElems(jsonFile) {
   let addsItemContainer = document.getElementsByClassName("adds__item-box");
   let addsItemContainerArray = Array.from(addsItemContainer);
   for (let keys in jsonData) {
-    addsItemContainerArray.forEach((elem) => {
+    addsItemContainerArray.forEach((elem, index) => {
       elem.insertAdjacentHTML(
         "beforeend",
         `
@@ -166,6 +167,14 @@ export async function addsElems(jsonFile) {
                     type="checkbox"
                     data-add=${keys}
                     name="adds-checkbox"
+                    ${
+                      saveOptionCondition(
+                        finalStepObject.adds,
+                        jsonData[keys].id
+                      )
+                        ? "checked"
+                        : ""
+                    }
                   />
                   <label
                     class="adds-checkbox--custom"
@@ -265,6 +274,26 @@ export function totalElems() {
     }
   });
 }
+export function vidgetElems(variousText) {
+  let main = document.querySelector("main");
+  let vidgetBox = document.createElement("div");
+  vidgetBox.className = "denied__box denied--open";
+  vidgetBox.insertAdjacentHTML(
+    `afterbegin`,
+    `
+    <img class="denied-img" src="./assets/images/denied.svg" alt="denied" />
+    <h4 class="denied-text">${variousText}</h4>
+  `
+  );
+  main.prepend(vidgetBox);
+  setTimeout(() => {
+    vidgetBox.classList.replace("denied--open", "denied--closed");
+    setTimeout(() => {
+      main.removeChild(vidgetBox);
+    }, 1000);
+  }, 2000);
+}
+vidgetElems = limitExecByInterval(vidgetElems, 3000);
 
 function totalData() {
   let obj = finalStepObject;
@@ -296,6 +325,19 @@ function changingPrice(container, text) {
   });
 }
 
+function extraMonthes(rent, container) {
+  container.forEach((elem) => {
+    let extraMonthesBox = document.createElement("p");
+    extraMonthesBox.className = "extra-month";
+    if (rent) {
+      elem.append(extraMonthesBox);
+      extraMonthesBox.innerText = "2 extra monthes";
+    } else if (elem.querySelectorAll(".extra-month").length > 0) {
+      elem.removeChild(elem.querySelector(".extra-month"));
+    }
+  });
+}
+
 function fillData(e, fillObj, jsonObj) {
   let objValues = Object.values(jsonObj);
   document.querySelectorAll(e).forEach((elem, index) => {
@@ -310,6 +352,7 @@ function fillData(e, fillObj, jsonObj) {
             name: objValues[index].planName,
             price: properPriceVal,
           };
+          console.log(objValues[index]);
           break;
         case "checkbox":
           fillObj[index] = {
@@ -327,8 +370,29 @@ function fillData(e, fillObj, jsonObj) {
 
 //help func
 
+function saveOptionCondition(obj, keyName) {
+  return Object.hasOwn(obj, keyName);
+}
+
 async function getJsonData(json) {
   let res = await fetch(json);
   jsonData = await res.json();
+}
+
+function limitExecByInterval(fn, time) {
+  let lock, execOnUnlock, args;
+  return function () {
+    args = arguments;
+    if (!lock) {
+      lock = true;
+      setTimeout(function () {
+        lock = false;
+        if (execOnUnlock) {
+          execOnUnlock = false;
+        }
+      }, time);
+      return fn.apply(this, args);
+    } else execOnUnlock = true;
+  };
 }
 ////////////////

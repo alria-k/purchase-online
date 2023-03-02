@@ -1,5 +1,5 @@
 import { addsElems, planElems, formElems, totalElems } from "./elements.js";
-import { validation } from "./validator.js";
+import { validation, validatePickPlan } from "./validator.js";
 
 const sectionInner = document.querySelector(".section__inner");
 export class StepsLogic {
@@ -40,10 +40,17 @@ export class StepsLogic {
         params: "",
       },
     };
+    this.validationArray = [
+      this.checkValidForms,
+      this.checkValidRadio,
+      this.checkValidCheckBox,
+    ];
 
     this.validateContent = this.validateContent.bind(this);
     this.checkAndChangeSteps = this.checkAndChangeSteps.bind(this);
-    this.checkValid = this.checkValid.bind(this);
+    this.checkValidForms = this.checkValidForms.bind(this);
+    this.checkValidRadio = this.checkValidRadio.bind(this);
+    this.checkValidCheckBox = this.checkValidCheckBox.bind(this);
 
     this.checkAndChangeSteps();
     this.validateContent();
@@ -51,13 +58,7 @@ export class StepsLogic {
   validateContent() {
     document.addEventListener("click", (event) => {
       if (event.target.classList.contains("next-step__btn")) {
-        if (this.checkValid()) {
-          this.stepsCount++;
-          this.checkAndChangeSteps(
-            "form__animation--forward",
-            "form__animation--backwards"
-          );
-        }
+        this.validationArray[this.stepsCount].apply(this);
       }
       if (event.target.classList.contains("back-step__btn")) {
         this.stepsCount--;
@@ -88,14 +89,37 @@ export class StepsLogic {
       }
     }, 600);
   }
-  checkValid() {
+  checkValidForms() {
     validation(document.querySelectorAll(".form__input"), this.fieldsData);
     let key = [];
     for (let keys in this.fieldsData) {
       if (this.fieldsData[keys].valid == true) {
         key.push(this.fieldsData[keys].valid);
       }
+      if (key.length == 3) {
+        this.fieldsData[keys].valid = false;
+        this.stepsCount++;
+        this.checkAndChangeSteps(
+          "form__animation--forward",
+          "form__animation--backwards"
+        );
+      }
     }
-    if (key.length == 3) return true;
+  }
+  checkValidRadio() {
+    if (validatePickPlan(document.querySelectorAll(".plan-radio"))) {
+      this.stepsCount++;
+      this.checkAndChangeSteps(
+        "form__animation--forward",
+        "form__animation--backwards"
+      );
+    }
+  }
+  checkValidCheckBox() {
+    this.stepsCount++;
+    this.checkAndChangeSteps(
+      "form__animation--forward",
+      "form__animation--backwards"
+    );
   }
 }
