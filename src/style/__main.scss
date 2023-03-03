@@ -452,6 +452,24 @@
         animation-fill-mode: forwards;
     }
 }
+.confirm {
+    &-title {
+        font-size: 40px;
+        font-weight: 700;
+    }
+    &-subtitle {
+        color: hsl(231, 11%, 63%);
+    }
+    &__box {
+        text-align: center;
+        display: flex;
+        align-items: center;
+    }
+    &__img {
+        margin: 0 auto;
+    }
+}
+
 
 
 

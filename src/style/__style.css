@@ -523,6 +523,25 @@
   animation-fill-mode: forwards;
 }
 
+.confirm-title {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.confirm-subtitle {
+  color: #9699ab;
+}
+
+.confirm__box {
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.confirm__img {
+  margin: 0 auto;
+}
+
 @media (max-width: 768px) {
   body {
     background-color: #fafbff;

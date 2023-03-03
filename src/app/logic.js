@@ -4,6 +4,7 @@ import {
   formElems,
   totalElems,
   fillData,
+  confirmElems,
 } from "./elements.js";
 import { validation, validatePickPlan } from "./validator.js";
 
@@ -50,6 +51,7 @@ export class StepsLogic {
       this.checkValidForms,
       this.checkValidRadio,
       this.checkValidCheckBox,
+      this.checkTotalConfirm,
     ];
 
     this.validateContent = this.validateContent.bind(this);
@@ -57,6 +59,7 @@ export class StepsLogic {
     this.checkValidForms = this.checkValidForms.bind(this);
     this.checkValidRadio = this.checkValidRadio.bind(this);
     this.checkValidCheckBox = this.checkValidCheckBox.bind(this);
+    this.checkTotalConfirm = this.checkTotalConfirm.bind(this);
 
     this.checkAndChangeSteps();
     this.validateContent();
@@ -124,6 +127,14 @@ export class StepsLogic {
   }
   async checkValidCheckBox() {
     await fillData();
+    this.stepsCount++;
+    this.checkAndChangeSteps(
+      "form__animation--forward",
+      "form__animation--backwards"
+    );
+  }
+  checkTotalConfirm() {
+    confirmElems();
     this.stepsCount++;
     this.checkAndChangeSteps(
       "form__animation--forward",

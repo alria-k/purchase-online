@@ -462,3 +462,22 @@
   animation: vidgetUp 1s cubic-bezier(0.16, 1, 0.3, 1);
   animation-fill-mode: forwards;
 }
+
+.confirm-title {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.confirm-subtitle {
+  color: #9699ab;
+}
+
+.confirm__box {
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.confirm__img {
+  margin: 0 auto;
+}

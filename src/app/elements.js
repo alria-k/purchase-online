@@ -282,6 +282,28 @@ export function totalElems() {
     }
   });
 }
+export function confirmElems() {
+  sectionInner.insertAdjacentHTML(
+    "beforeend",
+    `
+  <div class="form__content confirm__box">
+  <img
+    class="confirm__img"
+    src="/assets/images/icon-thank-you.svg"
+    alt="thank-you"
+  />
+  <div class="confirm__text">
+    <h1 class="confirm-title">Thank you!</h1>
+    <p class="confirm-subtitle">
+      Thanks for confirming your subscription! We hope you have fun using
+      our platform. If you ever need support, please feel free to email us
+      at support@loremgaming.com.
+    </p>
+  </div>
+</div>
+  `
+  );
+}
 export function vidgetElems(variousText) {
   let main = document.querySelector("main");
   let vidgetBox = document.createElement("div");
