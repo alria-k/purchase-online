@@ -1,11 +1,11 @@
 @keyframes moveForward {
   0% {
-    z-index: -1;
+    z-index: 1;
     opacity: 0;
     transform: translate3d(600px, 0, 0);
   }
   100% {
-    z-index: -1;
+    z-index: 1;
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
@@ -13,12 +13,12 @@
 
 @keyframes moveBackwards {
   0% {
-    z-index: -1;
+    z-index: 1;
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
   100% {
-    z-index: -1;
+    z-index: 1;
     opacity: 0;
     transform: translate3d(-441px, 0, 0);
   }
@@ -27,11 +27,11 @@
 @keyframes fromBackToForward {
   0% {
     opacity: 0;
-    z-index: -1;
+    z-index: 1;
     transform: translate3d(-441px, 0, 0);
   }
   100% {
-    z-index: -1;
+    z-index: 1;
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
@@ -53,13 +53,13 @@
     transform: translate3d(0, -200px, 0);
   }
   100% {
-    transform: translate3d(0, -25px, 0);
+    transform: translate3d(0, 20px, 0);
   }
 }
 
 @keyframes vidgetUp {
   0% {
-    transform: translate3d(0, -25px, 0);
+    transform: translate3d(0, 20px, 0);
   }
   100% {
     transform: translate3d(0, -200px, 0);
@@ -442,7 +442,7 @@
   align-items: center;
   position: absolute;
   transform: translate3d(0, -200px, 0);
-  left: 50%;
+  left: 80%;
   gap: 10px;
   padding: 10px;
   border-radius: 12px;

@@ -1,4 +1,6 @@
 .aside {
+    position: relative;
+    z-index: 2;
     background-image: url('/assets/images/bg-sidebar-desktop.svg');
     background-repeat: no-repeat;
     max-width: 275px;

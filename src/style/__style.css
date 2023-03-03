@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap");
 .aside {
+  position: relative;
+  z-index: 2;
   background-image: url("/assets/images/bg-sidebar-desktop.svg");
   background-repeat: no-repeat;
   max-width: 275px;
@@ -58,12 +60,12 @@
 
 @keyframes moveForward {
   0% {
-    z-index: -1;
+    z-index: 1;
     opacity: 0;
     transform: translate3d(600px, 0, 0);
   }
   100% {
-    z-index: -1;
+    z-index: 1;
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
@@ -71,12 +73,12 @@
 
 @keyframes moveBackwards {
   0% {
-    z-index: -1;
+    z-index: 1;
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
   100% {
-    z-index: -1;
+    z-index: 1;
     opacity: 0;
     transform: translate3d(-441px, 0, 0);
   }
@@ -85,11 +87,11 @@
 @keyframes fromBackToForward {
   0% {
     opacity: 0;
-    z-index: -1;
+    z-index: 1;
     transform: translate3d(-441px, 0, 0);
   }
   100% {
-    z-index: -1;
+    z-index: 1;
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
@@ -111,13 +113,13 @@
     transform: translate3d(0, -200px, 0);
   }
   100% {
-    transform: translate3d(0, -25px, 0);
+    transform: translate3d(0, 20px, 0);
   }
 }
 
 @keyframes vidgetUp {
   0% {
-    transform: translate3d(0, -25px, 0);
+    transform: translate3d(0, 20px, 0);
   }
   100% {
     transform: translate3d(0, -200px, 0);
@@ -500,7 +502,7 @@
   align-items: center;
   position: absolute;
   transform: translate3d(0, -200px, 0);
-  left: 50%;
+  left: 80%;
   gap: 10px;
   padding: 10px;
   border-radius: 12px;
@@ -521,9 +523,105 @@
   animation-fill-mode: forwards;
 }
 
+@media (max-width: 768px) {
+  body {
+    background-color: #fafbff;
+  }
+  main {
+    margin-top: 0 !important;
+  }
+  .container {
+    padding: 0 !important;
+  }
+  .block {
+    gap: 0 !important;
+    flex-direction: column;
+    background-image: url("/assets/images/bg-sidebar-mobile.svg");
+    background-repeat: no-repeat;
+    background-position: top;
+  }
+  .aside {
+    background-image: none;
+    height: auto;
+    max-width: 375px;
+    z-index: 1;
+  }
+  .aside__steps-list {
+    margin: 0 auto;
+    max-width: 375px;
+    flex-direction: row;
+    justify-content: center;
+    padding: 25px 0 25px 0;
+  }
+  .steps__item {
+    gap: 0;
+  }
+  .steps-title {
+    display: none;
+  }
+  .steps-description {
+    display: none;
+  }
+  .steps__count {
+    padding: 4px 12px;
+  }
+  .section {
+    width: 100%;
+  }
+  .section__inner {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .form__content {
+    padding: 20px 20px;
+    background-color: white;
+    border-radius: 10px;
+  }
+  .form-title {
+    font-size: 28px;
+  }
+  .form-description {
+    font-size: 14px;
+  }
+  .form__text-box {
+    margin-bottom: 15px;
+  }
+  .btn-box {
+    margin-top: 25px;
+  }
+  .plan__container {
+    flex-direction: column;
+  }
+  .plan__item {
+    max-width: 100%;
+  }
+  .plan__img {
+    margin-bottom: 0;
+  }
+  .custom__radio {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tarif__title {
+    font-size: 16px;
+  }
+  .tarif__description {
+    font-size: 14px;
+  }
+  .denied__box {
+    left: 35%;
+    z-index: 111;
+  }
+  .adds__item-text {
+    flex: 0 160px;
+  }
+}
+
 body {
   font-family: 'Ubuntu', sans-serif;
   overflow-x: hidden;
+  height: 100vh;
 }
 
 main {
