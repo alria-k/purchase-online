@@ -39,7 +39,7 @@ export function formElems() {
                     />
                   </form>
                   <div class="btn-box">
-                    <input class="next-step__btn" type="submit" value="Next Step">
+                    <input class="next-step__btn" type="button" value="Next Step">
                   </div>
                 </div>
       `
@@ -61,7 +61,7 @@ export async function planElems(jsonFile) {
         </p>
       </div>
       <form>
-        <ul class="plan__container"></ul>
+        <ul class="plan__container options__box"></ul>
         <div class="payrent__box">
           <p class="payrent-text mounthly">Mounthly</p>
           <div class="payrent-checkbox__box">
@@ -80,8 +80,8 @@ export async function planElems(jsonFile) {
         </div>
       </form>
       <div class="btn-box">
-        <input class="next-step__btn" type="submit" value="Next Step">
-        <input class="back-step__btn" type="submit" value="Go Back">
+        <input class="next-step__btn" type="button" value="Next Step">
+        <input class="back-step__btn" type="button" value="Go Back">
       </div>`
   );
   let planItemContainer = document.getElementsByClassName("plan__container");
@@ -115,7 +115,6 @@ export async function planElems(jsonFile) {
     });
   }
   changingPrice("plan__item-text", ".money__component");
-  fillData("[type='radio']", finalStepObject.plan, jsonData);
   extraMonthes(yearlyRent, document.querySelectorAll(".plan__item-text"));
   document
     .querySelector(".payrent-checkbox")
@@ -145,11 +144,11 @@ export async function addsElems(jsonFile) {
           </p>
       </div>
         <form>
-          <ul class="adds__item-box"></ul>
+          <ul class="adds__item-box options__box"></ul>
         </form>
         <div class="btn-box">
-          <input class="next-step__btn" type="submit" value="Next Step">
-          <input class="back-step__btn" type="submit" value="Go Back">
+          <input class="next-step__btn" type="button" value="Next Step">
+          <input class="back-step__btn" type="button" value="Go Back">
         </div>
         `
   );
@@ -165,7 +164,7 @@ export async function addsElems(jsonFile) {
                   <input
                     class="adds-checkbox"
                     type="checkbox"
-                    data-add=${keys}
+                    data-adds=${keys}
                     name="adds-checkbox"
                     ${
                       saveOptionCondition(
@@ -198,14 +197,13 @@ export async function addsElems(jsonFile) {
     });
   }
   changingPrice("adds__item-price", ".money__component");
-  fillData(".adds-checkbox", finalStepObject.adds, jsonData);
 }
 export function totalElems() {
-  totalData();
   let stepContainer = document.createElement("div");
   stepContainer.className = "form__content fourth-step";
   stepContainer.dataset.stepCount = "fourth";
   sectionInner.append(stepContainer);
+  totalData();
   stepContainer.insertAdjacentHTML(
     "beforeend",
     `
@@ -217,23 +215,8 @@ export function totalElems() {
                 </div>
                 <div class="total__box">
                   <div class="total__box-info">
-                    <div class="total-plan__text">
-                      <div class="plan__text-title">
-                        <h4 class="tarif__title">${
-                          yearlyRent
-                            ? finalStepObject.plan.value.name + " (Yearly)"
-                            : finalStepObject.plan.value.name + " (Mounthly)"
-                        }</h4>
-                        <button class="btn__change-plan">Change</button>
-                      </div>
-                      <p class="tarif__title">$${
-                        yearlyRent
-                          ? finalStepObject.plan.value.price + "/yr"
-                          : finalStepObject.plan.value.price + "/mo"
-                      }</p>
-                    </div>
-                    <div class="total-adds__text">
-                    </div>
+                    <div class="total-plan__text"></div>
+                    <div class="total-adds__text"></div>
                   </div>
                   <div class="total__box-price">
                     <p class="tarif__description">Total ${
@@ -247,12 +230,37 @@ export function totalElems() {
                   </div>
                 </div>
                 <div class="btn-box">
-                  <input class="next-step__btn" type="submit" value="Confirm" />
-                  <input class="back-step__btn" type="submit" value="Go Back" />
+                  <input class="next-step__btn" type="button" value="Confirm" />
+                  <input class="back-step__btn" type="button" value="Go Back" />
                 </div>
               </div>
   `
   );
+  let planText = Array.from(
+    document.getElementsByClassName("total-plan__text")
+  );
+  planText.forEach((elem, index) => {
+    for (let keys in finalStepObject.plan) {
+      elem.insertAdjacentHTML(
+        "beforeend",
+        `
+      <div class="plan__text-title">
+          <h4 class="tarif__title">${
+            yearlyRent
+              ? finalStepObject.plan[keys].name + " (Yearly)"
+              : finalStepObject.plan[keys].name + " (Mounthly)"
+          }</h4>
+        <button class="btn__change-plan">Change</button>
+      </div>
+        <p class="tarif__title">$${
+          yearlyRent
+            ? finalStepObject.plan[keys].price + "/yr"
+            : finalStepObject.plan[keys].price + "/mo"
+        }</p>
+      `
+      );
+    }
+  });
   let addsText = Array.from(
     document.getElementsByClassName("total-adds__text")
   );
@@ -338,33 +346,33 @@ function extraMonthes(rent, container) {
   });
 }
 
-function fillData(e, fillObj, jsonObj) {
-  let objValues = Object.values(jsonObj);
-  document.querySelectorAll(e).forEach((elem, index) => {
-    elem.addEventListener("click", (event) => {
-      let targetAttribute = event.target.getAttribute("type");
-      let properPriceVal = yearlyRent
-        ? objValues[index].yearlyPrice
-        : objValues[index].mounthlyPrice;
-      switch (targetAttribute) {
+export async function fillData() {
+  let objValues = Object.values(await jsonData);
+  let fillObj = finalStepObject;
+  let inputsContainer = document.querySelector(".options__box");
+  inputsContainer.querySelectorAll("input").forEach((elem, index) => {
+    let properPriceVal = yearlyRent
+      ? objValues[index].yearlyPrice
+      : objValues[index].mounthlyPrice;
+    if (elem.checked) {
+      switch (elem.type) {
         case "radio":
-          fillObj.value = {
+          fillObj.plan[index] = {
             name: objValues[index].planName,
             price: properPriceVal,
           };
-          console.log(objValues[index]);
           break;
         case "checkbox":
-          fillObj[index] = {
+          fillObj.adds[index] = {
             name: objValues[index].addsName,
             price: properPriceVal,
           };
           break;
       }
-      if (!event.target.checked) {
-        delete fillObj[index];
-      }
-    });
+    }
+    if (!elem.checked) {
+      delete fillObj[Object.keys(elem.dataset)[0]][index];
+    }
   });
 }
 

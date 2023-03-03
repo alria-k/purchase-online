@@ -1,4 +1,10 @@
-import { addsElems, planElems, formElems, totalElems } from "./elements.js";
+import {
+  addsElems,
+  planElems,
+  formElems,
+  totalElems,
+  fillData,
+} from "./elements.js";
 import { validation, validatePickPlan } from "./validator.js";
 
 const sectionInner = document.querySelector(".section__inner");
@@ -56,7 +62,7 @@ export class StepsLogic {
     this.validateContent();
   }
   validateContent() {
-    document.addEventListener("click", (event) => {
+    document.addEventListener("click", async (event) => {
       if (event.target.classList.contains("next-step__btn")) {
         this.validationArray[this.stepsCount].apply(this);
       }
@@ -106,7 +112,8 @@ export class StepsLogic {
       }
     }
   }
-  checkValidRadio() {
+  async checkValidRadio() {
+    await fillData();
     if (validatePickPlan(document.querySelectorAll(".plan-radio"))) {
       this.stepsCount++;
       this.checkAndChangeSteps(
@@ -115,7 +122,8 @@ export class StepsLogic {
       );
     }
   }
-  checkValidCheckBox() {
+  async checkValidCheckBox() {
+    await fillData();
     this.stepsCount++;
     this.checkAndChangeSteps(
       "form__animation--forward",
