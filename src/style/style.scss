@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
-@import '__aside';
-@import '__main';
-@import '__media';
+@import 'aside';
+@import 'main';
+@import 'media';
 
 body {
     font-family: 'Ubuntu', sans-serif;

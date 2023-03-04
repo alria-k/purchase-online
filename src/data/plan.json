@@ -1,21 +1,21 @@
 {
     "arcade": {
             "id":0,
-            "img": "./assets/images/icon-arcade.svg",
+            "img": "./src/images/icon-arcade.svg",
             "planName": "Arcade",
             "mounthlyPrice": 9,
             "yearlyPrice": 90
     },
     "advanced": {
             "id":1,
-            "img": "./assets/images/icon-advanced.svg",
+            "img": "./src/images/icon-advanced.svg",
             "planName": "Advanced",
             "mounthlyPrice": 12,
             "yearlyPrice": 120
     },
     "pro":{
             "id":2,
-            "img": "./assets/images/icon-pro.svg",
+            "img": "./src/images/icon-pro.svg",
             "planName": "Pro",
             "mounthlyPrice": 15,
             "yearlyPrice": 150

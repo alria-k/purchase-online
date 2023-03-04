@@ -289,7 +289,7 @@ export function confirmElems() {
   <div class="form__content confirm__box">
   <img
     class="confirm__img"
-    src="/assets/images/icon-thank-you.svg"
+    src="./src/images/icon-thank-you.svg"
     alt="thank-you"
   />
   <div class="confirm__text">
@@ -311,7 +311,7 @@ export function vidgetElems(variousText) {
   vidgetBox.insertAdjacentHTML(
     `afterbegin`,
     `
-    <img class="denied-img" src="./assets/images/denied.svg" alt="denied" />
+    <img class="denied-img" src="./src/images/denied.svg" alt="denied" />
     <h4 class="denied-text">${variousText}</h4>
   `
   );
